@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <script>
+                location_href = location.href;
+                loc = location_href.split('/');
+                if (loc.pop() == "") {
+                        loc.pop();
+                }
+                content_host = loc.join("/");
+                content_url = content_host + "/motion/__/html/app.html?lng=ja#cell=";
+                redirct_url = content_url + location;
+                if (redirct_url.slice( -1 ) != "/") {
+                        redirct_url += "/";
+                }
+                location.href = redirct_url;
+        </script>
+</head>
+<body>
+</body>
+</html>
