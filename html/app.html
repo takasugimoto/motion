@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title data-i18n="glossary:title"></title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/8.4.3/i18next.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-xhr-backend/1.5.1/i18nextXHRBackend.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-browser-languagedetector/2.0.0/i18nextBrowserLanguageDetector.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-i18next/1.2.0/jquery-i18next.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Raleway:400,200' rel='stylesheet' type='text/css' />
+  <script>
+      let lastTouch = 0;
+      document.addEventListener('touchend', event => {
+        const now = window.performance.now();
+        if (now - lastTouch <= 500) {
+          event.preventDefault();
+        }
+        lastTouch = now;
+      }, true);
+      document.addEventListener('touchstart', event => {
+        if (event.touches.length > 1) {
+          event.preventDefault();
+        }
+      }, true);
+  </script>
+  <style>
+  #slideL {
+  	z-index:100;
+  	cursor: pointer;
+  	position: fixed;
+  	top: 0;
+  	left: -320px;
+  	width: 360px;
+  	height: auto;
+  	padding: 0 40px 0 0;
+  	background: #999;
+        display: none;
+  }
+  #slideL .slide-inner {
+  	position: relative;
+  	overflow: auto;
+  	overflow-x: hidden;
+  	background: #ddd;
+  }
+  #slideL .slide-inner section {
+  	padding: 20px;
+  }
+  #slideL .nav-icon {
+  	position: absolute;
+  	right: 10px;
+  	top: 20px;
+  	font-size: 20px;
+  	color: #fff;
+  }
+  </style>
+  <script>
+        var homeAppUrl = "https://mydata.takky.org/motion/";
+        var appUseBox = "__";
+        var rootUrl = "";
+        let head = document.getElementsByTagName('head')[0];
+        let script = document.createElement('script');
+        script.src = homeAppUrl + appUseBox + "/html/js/motion_login.js";
+        head.appendChild(script);
+        script.onload = function (e) {
+                mlg.setRootUrl(rootUrl);
+                mlg.motionLogin();
+        }
+  </script>
+</head>
+<body>
+        <div id="login" style="width=300px; text-align:center; margin-top:200px; display:none;">
+                <input type="text" id="login_user" name="txt_user" placeholder="UserName を入力して下さい" style="width:240px; margin-top:30px;"></input><br>
+                <input type="password" id="login_password" name="txt_password" placeholder="passsword を入力して下さい" style="width:240px; margin-top:20px;"></input><br>
+                <div style="width:100%; margin-top:20px; text-align:center; color:#ff0000;"><span id="login_error"></span></div><br>
+                <input type="button" name="btn_login" value="LOGIN" onclick="mlg.motionLogin();" style="margin:30px;"></input><br>
+        </div>
+        <div id="content" style="margin-left: 50px; display:none;">
+                <div id="logout" style="width:100%; height:40px; text-align:right; overflow:hidden;">
+                        <input type="button" name="btn_logout" value="LOGOUT" onclick="mlg.motionLogout();" style="float:right; margin:10px; margin-right:20px;"></input>
+                        <img id="user_img" src="./img/melon.png" width="26" height="26" style="float:right; margin-top:10px; margin-right:10px;">
+                        <span id="user_name" style="float:right; margin-top:13px; margin-right:10px;">ゲスト さん</span>
+                </div>
+                <div id="content" style="width:100%;">
+                        <div id="entitylist" style="width:100%;"></div>
+                </div>
+        </div>
+        <div id="slideL" class="off">
+            <span class="nav-icon"><i class="fa fa-bars"></i></span>
+            <div class="slide-inner">
+	        <section>
+		    <!-- blockquote cite="http://www.aozora.gr.jp/cards/000148/files/789_14547.html" -->
+                    <div id="menu"></div>
+		    <!-- /blockquote -->
+	        </section>
+	    </div>
+        </div>
+</body>
+<script>
+              $('#slideL').on('click',function() {
+                  if ($('#slideL').hasClass('off')) {
+                      $('#slideL').removeClass('off');
+                      $(this).animate({'marginLeft':'320px'},300).addClass('on');
+      	          } else {
+                      $('#slideL').addClass('off');
+                      $(this).animate({'marginLeft':'0px'},300);
+      	          }
+              });
+              $(document).ready(function() {
+      	    fit();
+      	    $(window).resize(function() {
+      		fit();
+                  });
+      	        function fit() {
+      		    var h = $(window).height();
+      		    $('.slide-inner').css("height",h);
+      	        }
+              });
+</script>
+</html>
