@@ -107,7 +107,7 @@ Common.dispAllowedCellListAfter = function(extUrl, no) {
             dispName = extUrl;
         }
     }).always(function() {
-        Common.getProfile(extUrl).done(function(data) {
+        Common.getProfile(extUrl, Common.accessData.locales).done(function(data) {
             if (data !== null) {
                 dispName = data.DisplayName;
             }
@@ -117,10 +117,14 @@ Common.dispAllowedCellListAfter = function(extUrl, no) {
     });
 };
 
-Common.getProfile = function(url) {
+Common.getProfile = function(url, loc) {
+    _loc = "";
+    if (loc) {
+            _loc = '/locales/' + loc;
+    }
     return $.ajax({
         type: "GET",
-        url: url + '__/profile.json',
+        url: url + '__' + _loc + '/profile.json',
         dataType: 'json',
         headers: {'Accept':'application/json'}
     })
@@ -205,7 +209,7 @@ Common.getProfileName = function(extUrl, callback) {
             dispName = extUrl;
         }
     }).always(function() {
-        Common.getProfile(extUrl).done(function(data) {
+        Common.getProfile(extUrl, Common.accessData.locales).done(function(data) {
             if (data !== null) {
                 dispName = data.DisplayName;
                 dispImage = data.Image;

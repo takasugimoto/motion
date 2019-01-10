@@ -1,78 +1,207 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <title data-i18n="glossary:title"></title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/8.4.3/i18next.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-xhr-backend/1.5.1/i18nextXHRBackend.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-browser-languagedetector/2.0.0/i18nextBrowserLanguageDetector.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-i18next/1.2.0/jquery-i18next.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <link href='https://fonts.googleapis.com/css?family=Raleway:400,200' rel='stylesheet' type='text/css' />
-  <script>
-      let lastTouch = 0;
-      document.addEventListener('touchend', event => {
-        const now = window.performance.now();
-        if (now - lastTouch <= 500) {
-          event.preventDefault();
-        }
-        lastTouch = now;
-      }, true);
-      document.addEventListener('touchstart', event => {
-        if (event.touches.length > 1) {
-          event.preventDefault();
-        }
-      }, true);
-  </script>
-  <style>
-  #slideL {
-  	z-index:100;
-  	cursor: pointer;
-  	position: fixed;
-  	top: 0;
-  	left: -320px;
-  	width: 360px;
-  	height: auto;
-  	padding: 0 40px 0 0;
-  	background: #999;
-        display: none;
-  }
-  #slideL .slide-inner {
-  	position: relative;
-  	overflow: auto;
-  	overflow-x: hidden;
-  	background: #ddd;
-  }
-  #slideL .slide-inner section {
-  	padding: 20px;
-  }
-  #slideL .nav-icon {
-  	position: absolute;
-  	right: 10px;
-  	top: 20px;
-  	font-size: 20px;
-  	color: #fff;
-  }
-  </style>
-  <script>
-        var homeAppUrl = "https://mydata.takky.org/motion/";
-        var appUseBox = "__";
-        var rootUrl = "";
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title data-i18n="glossary:title"></title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/8.4.3/i18next.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-xhr-backend/1.5.1/i18nextXHRBackend.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-browser-languagedetector/2.0.0/i18nextBrowserLanguageDetector.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-i18next/1.2.0/jquery-i18next.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href='https://fonts.googleapis.com/css?family=Raleway:400,200' rel='stylesheet' type='text/css' />
+<script>
+        let lastTouch = 0;
+        document.addEventListener('touchend', event => {
+                const now = window.performance.now();
+                if (now - lastTouch <= 500) {
+                        event.preventDefault();
+                }
+                lastTouch = now;
+        }, true);
+        document.addEventListener('touchstart', event => {
+                if (event.touches.length > 1) {
+                        event.preventDefault();
+                }
+        }, true);
+
+        // 最初（ログイン前）に読み込むJavaScriptを指定（Box名の後ろから）　//
+        var homeAppJS = "/html/js/motion_login.js";
+
+        var appUseBox = "__";           // アプリセルのBox名（変更しなくて良い）
+        var rootUrl = "";               // ログイン済みのRootURL（未ログイン時は””を指定）
+        var homeAppUrl = location.origin + "/" + location.pathname.split("/")[1] + "/";
+
         let head = document.getElementsByTagName('head')[0];
         let script = document.createElement('script');
-        script.src = homeAppUrl + appUseBox + "/html/js/motion_login.js";
+        script.src = homeAppUrl + appUseBox + homeAppJS;
         head.appendChild(script);
         script.onload = function (e) {
                 mlg.setRootUrl(rootUrl);
                 mlg.motionLogin();
         }
-  </script>
+</script>
+<style>
+        ul {
+                list-style: none;
+                padding-inline-start: 0;
+                -webkit-padding-start: 0;
+        }
+        a {
+                text-decoration: none;
+        }
+        .MenuTitle {
+                text-align: center;
+                margin: 20px auto;
+                color: #fff;
+        }
+        .accordion-menu {
+                width: 100%;
+                max-width: 350px;
+                margin: 60px auto 20px;
+                background: #fff;
+                border-radius: 4px;
+        }
+        .accordion-menu li.open .dropdownlink {
+                color: #CDDC39;
+        }
+        .accordion-menu li.open .dropdownlink .fa-chevron-down {
+                transform: rotate(180deg);
+        }
+        .accordion-menu li:last-child .dropdownlink {
+                border-bottom: 0;
+        }
+        .dropdownlink {
+                cursor: pointer;
+                display: block;
+                padding: 15px 15px 15px 15px;
+                font-size: 18px;
+                border-bottom: 1px solid #ccc;
+                color: #212121;
+                position: relative;
+                transition: all 0.4s ease-out;
+        }
+        .fa-load {
+                position: absolute;
+                top: 17px;
+                left: 16px;
+        }
+        .fa-chevron-down {
+                position: absolute;
+                right: 12px;
+                left: auto;
+        }
+        .submenuItems {
+                display: none;
+                background: #C8E6C9;
+                li {
+                        border-bottom: 1px solid #B6B6B6;
+                }
+        }
+        .submenuItems a {
+                display: block;
+                color: #727272;
+                padding: 12px 12px 12px 45px;
+                transition: all 0.4s ease-out;
+                text-decoration: none;
+                &:hover {
+                        background-color: #CDDC39;
+                        color: #fff;
+                }
+        }
+        .dropdownAction {
+                cursor: pointer;
+                display: block;
+                padding: 15px 15px 15px 15px;
+                font-size: 18px;
+                border-bottom: 1px solid #ccc;
+                color: #212121;
+                position: relative;
+        }
+        #slideL {
+                z-index:100;
+                cursor: pointer;
+                position: fixed;
+                top: 0;
+                left: -320px;
+                width: 360px;
+                height: auto;
+                padding: 0 40px 0 0;
+                background: #999;
+                display: none;
+        }
+        #slideL .slide-inner {
+                position: relative;
+                overflow: auto;
+                overflow-x: hidden;
+                background: #ddd;
+        }
+        #slideL .slide-inner section {
+                padding: 20px;
+        }
+        #slideL .nav-icon {
+                position: absolute;
+                right: 10px;
+                top: 20px;
+                font-size: 20px;
+                color: #fff;
+        }
+</style>
+<script>
+        $(function() {
+          var Accordion = function(el, multiple) {
+                  this.el = el || {};
+                  // more then one submenu open?
+                  this.multiple = multiple || false;
+
+                  var dropdownlink_link = this.el.find('.dropdownlink');
+                  dropdownlink_link.on('click',
+                        { el: this.el, multiple: this.multiple },
+                        this.dropdown);
+
+                  var dropdownlink_action = this.el.find('.dropdownAction');
+                  dropdownlink_action.on('click', function() {
+                          mlg.motionLogout();
+                  });
+
+                  var dropdownlink_submenu = this.el.find('.submenuItems');
+                  dropdownlink_submenu.on('click',
+                        { el: this.el, multiple: this.multiple },
+                        this.dropdown);
+
+          };
+
+          Accordion.prototype.dropdown = function(e) {
+                  e.stopPropagation();
+                  var $el = e.data.el,
+                      $this = $(this),
+                      //this is the ul.submenuItems
+                      $next = $this.next();
+
+                  $next.slideToggle();
+                  $this.parent().toggleClass('open');
+
+                  if(!e.data.multiple) {
+                          //show only one menu at the same time
+                          $el.find('.submenuItems').not($next).slideUp().parent().removeClass('open');
+                  }
+          }
+
+          var accordion = new Accordion($('.accordion-menu'), false);
+          // メニュー内の submenuItems の設定値をアプリ環境に合わせる
+          [].forEach.call(document.querySelectorAll('[id]'), function(elm) {
+                  if (elm.id == "menuLi") {
+                        $(elm).attr("href", location.hash);
+                        //$(elm).attr("onclick", "$('#content').click();");
+                  }
+          });
+      });
+</script>
 </head>
 <body>
         <div id="login" style="width=300px; text-align:center; margin-top:200px; display:none;">
@@ -81,46 +210,113 @@
                 <div style="width:100%; margin-top:20px; text-align:center; color:#ff0000;"><span id="login_error"></span></div><br>
                 <input type="button" name="btn_login" value="LOGIN" onclick="mlg.motionLogin();" style="margin:30px;"></input><br>
         </div>
-        <div id="content" style="margin-left: 50px; display:none;">
-                <div id="logout" style="width:100%; height:40px; text-align:right; overflow:hidden;">
-                        <input type="button" name="btn_logout" value="LOGOUT" onclick="mlg.motionLogout();" style="float:right; margin:10px; margin-right:20px;"></input>
-                        <img id="user_img" src="./img/melon.png" width="26" height="26" style="float:right; margin-top:10px; margin-right:10px;">
-                        <span id="user_name" style="float:right; margin-top:13px; margin-right:10px;">ゲスト さん</span>
+        <div id="content" style="cursor:pointer; height:100vh; margin-left: 50px; display:none;">
+                <div id="header" style="width:100%; height:40px; text-align:right;">
+                        <i data-i18n="glossary:title" style="float:left; font-size:24px; margin-left:10px; margin-top:10px;"></i>
+                        <div style="float:right;">
+                                <!-- input type="button" name="btn_logout" value="LOGOUT" onclick="mlg.motionLogout();" style="float:right; margin:10px; margin-right:20px;"></input -->
+                                <span id="user_name" style="margin-top:10px; margin-right:10px;">ゲスト さん</span>
+                                <img id="user_img" src="./img/melon.png" width="26" height="26" style="margin-right:10px;">
+                                <select name="select_locales" style="margin:10px; margin-right:20px;">
+                                        <option value="" selected>default</option>
+                                        <option value="ja">Japanese</option>
+                                        <option value="en">English</option>
+                                </select>
+                        </div>
                 </div>
-                <div id="content" style="width:100%;">
+                <div id="contents" style="position:absolute; top:80px; width:100vw; margin:15px;">
                         <div id="entitylist" style="width:100%;"></div>
                 </div>
         </div>
         <div id="slideL" class="off">
-            <span class="nav-icon"><i class="fa fa-bars"></i></span>
-            <div class="slide-inner">
-	        <section>
-		    <!-- blockquote cite="http://www.aozora.gr.jp/cards/000148/files/789_14547.html" -->
-                    <div id="menu"></div>
-		    <!-- /blockquote -->
-	        </section>
-	    </div>
+                <span class="nav-icon"><i class="fa fa-bars"></i></span>
+                <div class="slide-inner">
+                        <section>
+                                <div id="menu">
+                                        <h2 class="MenuTitle">MENU</h2>
+                                        <ul class="accordion-menu">
+                                                <li>
+                                                        <div class="dropdownlink"><i class="fa fa-road" aria-hidden="true"></i> History
+                                                                <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                                                        </div>
+                                                        <ul class="submenuItems">
+                                                                <li><a id="menuLi" href="#" onclick="alert('Hi!!');">History book 1</a></li>
+                                                                <li><a id="menuLi" href="#">History book 2</a></li>
+                                                                <li><a id="menuLi" href="#">History book 3</a></li>
+                                                        </ul>
+                                                </li>
+                                                <li>
+                                                        <div class="dropdownlink"><i class="fa fa-paper-plane" aria-hidden="true"></i> Fiction
+                                                                <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                                                        </div>
+                                                        <ul class="submenuItems">
+                                                                <li><a id="menuLi" href="#">Fiction book 1</a></li>
+                                                                <li><a id="menuLi" href="#">Fiction book 2</a></li>
+                                                                <li><a id="menuLi" href="#">Fiction book 3</a></li>
+                                                        </ul>
+                                                </li>
+                                                <li>
+                                                        <div class="dropdownlink"><i class="fa fa-quote-left" aria-hidden="true"></i> Fantasy
+                                                                <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                                                        </div>
+                                                        <ul class="submenuItems">
+                                                                <li><a id="menuLi" href="#">Fantasy book 1</a></li>
+                                                                <li><a id="menuLi" href="#">Fantasy book 2</a></li>
+                                                                <li><a id="menuLi" href="#">Fantasy book 3</a></li>
+                                                        </ul>
+                                                </li>
+                                                <li>
+                                                        <div class="dropdownAction"><i class="fa fa-motorcycle" aria-hidden="true"></i>
+                                                                Logout
+                                                        </div>
+                                                </li>
+                                        </ul>
+                                </div>
+                        </section>
+                </div>
         </div>
 </body>
 <script>
-              $('#slideL').on('click',function() {
-                  if ($('#slideL').hasClass('off')) {
-                      $('#slideL').removeClass('off');
-                      $(this).animate({'marginLeft':'320px'},300).addClass('on');
-      	          } else {
-                      $('#slideL').addClass('off');
-                      $(this).animate({'marginLeft':'0px'},300);
-      	          }
-              });
-              $(document).ready(function() {
-      	    fit();
-      	    $(window).resize(function() {
-      		fit();
-                  });
+        $(document).click(function(event) {
+                if($(event.target).closest('#slideL').length) {
+                        if ($('#slideL').hasClass('off')) {
+                                $('#slideL').removeClass('off');
+                                $('#slideL').animate({'marginLeft':'320px'},300).addClass('on');
+                        }
+                } else {
+                        $('#slideL').addClass('off');
+                        $('#slideL').animate({'marginLeft':'0px'},300);
+                }
+        });
+        $(document).ready(function() {
+      	        fit();
+      	        $(window).resize(function() {
+                        fit();
+                });
       	        function fit() {
-      		    var h = $(window).height();
-      		    $('.slide-inner').css("height",h);
+                        var h = $(window).height();
+                        $('.slide-inner').css("height",h);
       	        }
-              });
+        });
+        var dispName = "";
+        var dispImage = "";
+        var loc = "";
+        $("*[name=select_locales]").on('change', function() {
+                loc = $("*[name=select_locales]").val();
+                i18next.changeLanguage(loc);
+                Common.getProfile(Common.accessData.cellUrl, loc).done(function(data) {
+                        if (data !== null) {
+                                dispName = data.DisplayName;
+                                dispImage = data.Image;
+                        }
+                }).always(function(){
+                        Common.accessData.userName = dispName;
+                        Common.accessData.profile = dispImage;
+                        Common.accessData.locales = loc;
+                        sessionStorage.setItem("Common.accessData", JSON.stringify(Common.accessData));
+                        mlg.refreshProfile();
+                        Common.updateContent();
+                });
+        });
 </script>
 </html>

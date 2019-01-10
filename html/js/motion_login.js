@@ -24,6 +24,7 @@ mlg.motionLogout = function () {
     mlg.sendAccountNamePw("", "", "");
     $("#user_img").attr("src", "./img/melon.png");
     $("#user_name").html("ゲスト さん");
+    $('#slideL').animate({'marginLeft':'0px'},0);
     mlg.dispLogin();
 }
 mlg.motionLogin = function () {
@@ -38,6 +39,7 @@ mlg.motionLogin = function () {
     commdata = JSON.parse(sessionStorage.getItem("Common.accessData"));
     if (commdata) {
             mlg.access_token = commdata.token;
+            $("*[name=select_locales]").val(commdata.locales);
     }
     if (mlg.access_token) {
         mlg.sendAccountNamePw(mlg.access_token, "", "");
@@ -55,6 +57,7 @@ mlg.motionLogin = function () {
     } else {
         mlg.dispLogin();
     }
+    $('#slideL').addClass('off');
 }
 mlg.getCell = function (cellUrl) {
     if (!cellUrl) cellUrl = "https";
@@ -77,13 +80,6 @@ mlg.sendAccountNamePw = function(token, username, pw) {
             refresh_token = commdata.refToken;
         }
         _ajax = {
-            //type: "GET",
-            //url: mlg.rootUrl + 'app_motion/test/\$metadata/',
-            //url: mlg.rootUrl + '__box',
-            //headers: {
-            //    'Accept': 'application/json',
-            //    'Authorization': "Bearer " + access_token
-            //}
             type: "POST",
             url: mlg.rootUrl + '__token',
             processData: true,
@@ -203,7 +199,11 @@ mlg.refreshProfile = function() {
         if (Common.accessData.userName) {
                 motion.getODataEntityList(Common.accessData.token, "contents", "content");
                 $("#user_img").attr("src", Common.accessData.profile);
-                $("#user_name").html(Common.accessData.userName + " さん");
+                if (!Common.accessData.locales == "ja") {
+                        $("#user_name").html(Common.accessData.userName);
+                } else {
+                        $("#user_name").html(Common.accessData.userName + " さん");
+                }
                 clearInterval(mlg.checkProfileTimer);
         }
     } catch {

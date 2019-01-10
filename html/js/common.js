@@ -37,6 +37,7 @@ Common.accessData = {
     refExpires: null,
     profile: null,
     userName: null,
+    locales: null,
     access_token: null
 };
 
@@ -46,12 +47,19 @@ Common.unitUrl = "";
 /*
  * The followings should be shared among applications and/or within the same application.
  */
+commdata = JSON.parse(sessionStorage.getItem("Common.accessData"));
+if (commdata) {
+        Common.accessData = commdata;
+} else {
+        Common.accessData.locales = "ja";
+}
 $(document).ready(function() {
     i18next
         .use(i18nextXHRBackend)
         .use(i18nextBrowserLanguageDetector)
         .init({
-            fallbackLng: 'en',
+            fallbackLng: "en",
+            lng: Common.accessData.locales,
             ns: getNamesapces(),
             defaultNS: 'common',
             debug: true,
@@ -62,19 +70,14 @@ $(document).ready(function() {
             }
         }, function(err, t) {
             Common.initJqueryI18next();
-
             Common.appendCommonDialog();
-
             Common.setAppCellUrl(function() {
-
                 Common.setAccessData();
-
 		        if (!Common.checkParam()) {
 		            // cannot do anything to recover
 		            // display a dialog and close the app.
 		            return;
 		        };
-
 		        Common.startOAuth2(function(){
 		            let cellUrl = Common.getCellUrl();
 		            let token = Common.getToken();
@@ -99,7 +102,6 @@ $(document).ready(function() {
 		                    Common.showIrrecoverableErrorDialog("msg.error.failedToGetBoxUrl");
 		                });
 		        });
-
 		        Common.updateContent();
         	});
     	});
