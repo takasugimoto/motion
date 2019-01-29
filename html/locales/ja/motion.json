@@ -1,0 +1,46 @@
+{
+        "title": "Takky's テストアプリ",
+        "menu": {
+                "title": "メニュー",
+                "menuItems": [
+                        {
+                                "title": "自分のコンテンツ",
+                                "icon": "fa-user",
+                                "submenuItems": [
+                                        {
+                                                "title": "コンテンツの表示",
+                                                "action": "mlg.dispMyContents()"
+                                        },
+                                        {
+                                                "title": "コンテンツのアップロード",
+                                                "action": "mlg.dispUpload()"
+                                        }
+                                ]
+                        },
+                        {
+                                "title": "友達のコンテンツ",
+                                "icon": "fa-users",
+                                "submenuItems": [
+                                        {
+                                                "title": "チームのコンテンツ",
+                                                "action": "mlg.dispTeamContents()"
+                                        }
+                                ]
+                        },
+                        {
+                                "title": "ユーザー設定",
+                                "icon": "fa-cogs",
+                                "action": "mlg.dispSetting()"
+                        },
+                        {
+                                "title": "ログアウト",
+                                "icon": "fa-sign-out",
+                                "action": "mlg.motionLogout()"
+                        }
+
+                ]
+        },
+        "error": {
+                "login_error": "UserName もしくは Password を確認してください。"
+        }
+}

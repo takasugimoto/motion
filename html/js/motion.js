@@ -20,5 +20,5 @@ motion.getODataEntityListDisplay = function(respons_json) {
         respons_json.d.results.forEach(function( _resp ) {
                 _html.push(_resp.no + " " + _resp.titel + " " + _resp.name);
         });
-        $("#entitylist").html(_html.join("<br>"));
+        $("#myContents").html(_html.join("<br>"));
 }

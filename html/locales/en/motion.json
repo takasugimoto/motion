@@ -1,0 +1,46 @@
+{
+        "title": "Takky's TEST App",
+        "menu": {
+                "title": "MENU",
+                "menuItems": [
+                        {
+                                "title": "My Contents",
+                                "icon": "fa-user",
+                                "submenuItems": [
+                                        {
+                                                "title": "Show Contents",
+                                                "action": "mlg.dispMyContents()"
+                                        },
+                                        {
+                                                "title": "Upload Contents",
+                                                "action": "mlg.dispUpload()"
+                                        }
+                                ]
+                        },
+                        {
+                                "title": "My Friends",
+                                "icon": "fa-users",
+                                "submenuItems": [
+                                        {
+                                                "title": "Team's Contents",
+                                                "action": "mlg.dispTeamContents()"
+                                        }
+                                ]
+                        },
+                        {
+                                "title": "User Setting",
+                                "icon": "fa-cogs",
+                                "action": "mlg.dispSetting()"
+                        },
+                        {
+                                "title": "Logout",
+                                "icon": "fa-sign-out",
+                                "action": "mlg.motionLogout()"
+                        }
+
+                ]
+        },
+        "error": {
+                "login_error": "Check UserName or Password."
+        }
+}

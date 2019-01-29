@@ -9,7 +9,8 @@ getStartOAuth2EngineEndPoint = function() {
 };
 
 getNamesapces = function() {
-    return ['common', 'glossary'];
+    //return ['common', 'glossary'];
+    return ['motion'];
 };
 
 additionalCallback = function() {

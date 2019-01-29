@@ -132,7 +132,7 @@ mlg.sendAccountNamePw = function(token, username, pw) {
     }).fail(function(){
         // login failed
         if (username) {
-                $("#login_error").html("UserName もしくは Password が間違っています。");
+                $("#login_error").html("UserName もしくは Password を確認してください。");
         } else {
                 mlg.access_token = "";
                 try {
@@ -168,9 +168,9 @@ mlg.loadScript = function(callback) {
     let head = document.getElementsByTagName('head')[0];
     let scriptList = [
         homeAppUrl + appUseBox + "/html/js/app.js",
+        homeAppUrl + appUseBox + "/html/js/motion.js",
         homeAppUrl + appUseBox + "/html/js/common.js",
-        homeAppUrl + appUseBox + "/html/js/common_personium.js",
-        homeAppUrl + appUseBox + "/html/js/motion.js"
+        homeAppUrl + appUseBox + "/html/js/common_personium.js"
     ];
     let i = 0;
     (function appendScript() {
@@ -190,28 +190,98 @@ mlg.loadScript = function(callback) {
         }
     })();
 }
+mlg.menuTimer = function() {
+    mlg.mn_cnt = 0;
+    mlg.checkMenuTimer = setInterval(mlg.refreshMenu, mlg.PROFILE_TIMEOUT);
+}
+mlg.refreshMenu = function() {
+    if ($("#menu").html() == "") {
+        mlg.mn_cnt += 1;
+        if (mlg.mn_cnt > 20) {
+            clearInterval(mlg.checkMenuTimer);
+        }
+    } else {
+        clearInterval(mlg.checkMenuTimer);
+    }
+    mlg.writeMenu();
+}
 mlg.profileTimer = function() {
     mlg.rp_cnt = 0;
     mlg.checkProfileTimer = setInterval(mlg.refreshProfile, mlg.PROFILE_TIMEOUT);
+    mlg.menuTimer();
 }
 mlg.refreshProfile = function() {
     try {
-        if (Common.accessData.userName) {
-                motion.getODataEntityList(Common.accessData.token, "contents", "content");
-                $("#user_img").attr("src", Common.accessData.profile);
-                if (!Common.accessData.locales == "ja") {
-                        $("#user_name").html(Common.accessData.userName);
-                } else {
-                        $("#user_name").html(Common.accessData.userName + " さん");
-                }
-                clearInterval(mlg.checkProfileTimer);
-        }
+        uName = Common.accessData.userName;
     } catch {
         mlg.rp_cnt += 1;
-        if (mlg.rp_cnt > 5) {
+        if (mlg.rp_cnt > 10) {
                 clearInterval(mlg.checkProfileTimer);
         }
+        return;
     }
+    if (Common.accessData.userName) {
+        clearInterval(mlg.checkProfileTimer);
+        motion.getODataEntityList(Common.accessData.token, "contents", "content");
+        $("#user_img").attr("src", Common.accessData.profile);
+        if (Common.accessData.locales == "en") {
+                $("#user_name").html(Common.accessData.userName);
+        } else {
+                $("#user_name").html(Common.accessData.userName + " さん");
+        }
+    }
+    mlg.writeMenu();
+}
+mlg.writeMenu = function() {
+        nameSapces = "motion";
+        menuHtml = "";
+        menuTitle = "menu.title";
+        obj = i18next.t(nameSapces + ":" + menuTitle);
+        if (obj != menuTitle) {
+                menuHtml += '<h2 class="MenuTitle">' + obj + '</h2>';
+        }
+        menuHtml += '<ul class="accordion-menu">';
+        mi = 0;
+        mItem = "menu.menuItems." + mi + ".title";
+        while (i18next.t(nameSapces + ":" + mItem) != mItem) {
+                mAction = "menu.menuItems." + mi + ".action";
+                if (i18next.t(nameSapces + ":" + mAction) != mAction) {
+                        obj = i18next.t(nameSapces + ":menu.menuItems." + mi + ".action");
+                        menuHtml += ('<li><div class="dropdownAction" onclick="' + obj + ';">');
+                        obj = i18next.t(nameSapces + ":menu.menuItems." + mi + ".icon");
+                        menuHtml += '<i class="fa ' + obj + '" aria-hidden="true"></i> ';
+                        obj = i18next.t(nameSapces + ":" + mItem);
+                        menuHtml += (obj + '</div></li>');
+                } else {
+                        //menuHtml += ('<li><div class="dropdownlink" onclick="accordion.dropdown();">');
+                        menuHtml += ('<li><div class="dropdownlink">');
+                        obj = i18next.t(nameSapces + ":menu.menuItems." + mi + ".icon");
+                        menuHtml += '<i class="fa ' + obj + '" aria-hidden="true"></i> ';
+                        obj = i18next.t(nameSapces + ":" + mItem);
+                        menuHtml += (obj + '</div><ul class="submenuItems">');
+                        smi = 0;
+                        smItem = "menu.menuItems." + mi + ".submenuItems." + smi + ".title";
+                        while (i18next.t(nameSapces + ":" + smItem) != smItem) {
+                                obj = i18next.t(nameSapces + ":menu.menuItems." + mi + ".submenuItems." + smi + ".action");
+                                menuHtml += ('<li><a id="menuLi" href="#" onclick="' + obj + ';">');
+                                obj = i18next.t(nameSapces + ":" + smItem);
+                                menuHtml += (obj + '</a></li>');
+                                smi += 1;
+                                smItem = "menu.menuItems." + mi + ".submenuItems." + smi + ".title";
+                        }
+                        menuHtml += '</ul></li>';
+                }
+                mi += 1;
+                mItem = "menu.menuItems." + mi + ".title";
+        }
+        menuHtml += '</ul>';
+        $("#menu").html(menuHtml);
+        var accordion = new Accordion($('.accordion-menu'), false);
+        [].forEach.call(document.querySelectorAll('[id]'), function(elm) {
+                if (elm.id == "menuLi") {
+                        $(elm).attr("href", "#cell=" + getHashCell(location.hash)['cell']);
+                }
+        });
 }
 mlg.dispLogin = function() {
         $("#slideL").css("display", "none");
@@ -222,4 +292,29 @@ mlg.dispContent = function() {
         $("#slideL").css("display", "block");
         $("#login").css("display", "none");
         $("#content").css("display", "block");
+        $('#slideL').animate({'marginLeft':'0px'},0);
+}
+mlg.dispMyContents = function() {
+        $("#myContents").css("display", "block");
+        $("#upload").css("display", "none");
+        $("#teamContents").css("display", "none");
+        $("#setting").css("display", "none");
+}
+mlg.dispUpload = function() {
+        $("#myContents").css("display", "none");
+        $("#upload").css("display", "block");
+        $("#teamContents").css("display", "none");
+        $("#setting").css("display", "none");
+}
+mlg.dispTeamContents = function() {
+        $("#myContents").css("display", "none");
+        $("#upload").css("display", "none");
+        $("#teamContents").css("display", "block");
+        $("#setting").css("display", "none");
+}
+mlg.dispSetting = function() {
+        $("#myContents").css("display", "none");
+        $("#upload").css("display", "none");
+        $("#teamContents").css("display", "none");
+        $("#setting").css("display", "block");
 }

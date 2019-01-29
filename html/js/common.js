@@ -61,7 +61,7 @@ $(document).ready(function() {
             fallbackLng: "en",
             lng: Common.accessData.locales,
             ns: getNamesapces(),
-            defaultNS: 'common',
+            defaultNS: 'motion',
             debug: true,
             backend: {
                 // load from i18next-gitbook repo
