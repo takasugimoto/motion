@@ -1,5 +1,6 @@
 {
         "title": "Takky's テストアプリ",
+        "uploadMessage": "ここにアップロードするファイルをドロップしてください。",
         "menu": {
                 "title": "メニュー",
                 "menuItems": [

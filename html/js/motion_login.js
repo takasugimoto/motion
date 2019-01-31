@@ -1,6 +1,14 @@
 var mlg = {};
 
 mlg.PROFILE_TIMEOUT = 1000;
+mlg.MYCONTENTS = "";
+mlg.UPLOAD = "";
+mlg.TEAMCONTENTS = "";
+mlg.SETTING = "";
+
+mlg.CONTENTDIR = "files";
+mlg.COLLECTION = "contents";
+mlg.ENTITY = "content";
 
 mlg.setRootUrl = function (cellUrl) {
     if (cellUrl) {
@@ -25,6 +33,10 @@ mlg.motionLogout = function () {
     $("#user_img").attr("src", "./img/melon.png");
     $("#user_name").html("ゲスト さん");
     $('#slideL').animate({'marginLeft':'0px'},0);
+    $("#myContents").html(mlg.MYCONTENTS);
+    $("#upload").html(mlg.UPLOAD);
+    $("#teamContents").html(mlg.TEAMCONTENTS);
+    $("#setting").html(mlg.SETTING);
     mlg.dispLogin();
 }
 mlg.motionLogin = function () {
@@ -58,6 +70,11 @@ mlg.motionLogin = function () {
         mlg.dispLogin();
     }
     $('#slideL').addClass('off');
+    mlg.dispMyContents();
+    mlg.MYCONTENTS = $("#myContents").html();
+    mlg.UPLOAD = $("#upload").html();
+    mlg.TEAMCONTENTS = $("#teamContents").html();
+    mlg.SETTING = $("#setting").html();
 }
 mlg.getCell = function (cellUrl) {
     if (!cellUrl) cellUrl = "https";
@@ -125,26 +142,17 @@ mlg.sendAccountNamePw = function(token, username, pw) {
             if (location.origin === undefined) {
                 location.origin = location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "");
             }
-            //mlg.loadStyleSheet();
+            mlg.loadStyleSheet();
             mlg.loadScript();
             mlg.dispContent();
         });
     }).fail(function(){
         // login failed
         if (username) {
-                $("#login_error").html("UserName もしくは Password を確認してください。");
+            $("#login_error").html("UserName もしくは Password を確認してください。");
         } else {
-                mlg.access_token = "";
-                try {
-                    Common.accessData.access_token = "";
-                    Common.accessData.token = "";
-                    Common.accessData.refToken = "";
-                    Common.accessData.expires = "";
-                    Common.accessData.refExpires = "";
-                    sessionStorage.setItem("Common.accessData", JSON.stringify(Common.accessData));
-                } catch(e) {
-                    sessionStorage.removeItem("Common.accessData");
-                }
+            mlg.access_token = "";
+            sessionStorage.removeItem("Common.accessData");
         }
         mlg.dispLogin();
     });
@@ -152,8 +160,7 @@ mlg.sendAccountNamePw = function(token, username, pw) {
 mlg.loadStyleSheet = function() {
     let head = document.getElementsByTagName('head')[0];
     let styleList = [
-        homeAppUrl + appUseBox + "/html/css/common.css",
-        homeAppUrl + appUseBox + "/html/css/personium.css"
+        homeAppUrl + appUseBox + "/html/css/upload.css",
     ];
 
     for (var i = 0; i < styleList.length; i++) {
@@ -203,7 +210,6 @@ mlg.refreshMenu = function() {
     } else {
         clearInterval(mlg.checkMenuTimer);
     }
-    mlg.writeMenu();
 }
 mlg.profileTimer = function() {
     mlg.rp_cnt = 0;
@@ -239,6 +245,8 @@ mlg.writeMenu = function() {
         obj = i18next.t(nameSapces + ":" + menuTitle);
         if (obj != menuTitle) {
                 menuHtml += '<h2 class="MenuTitle">' + obj + '</h2>';
+        } else {
+                return;
         }
         menuHtml += '<ul class="accordion-menu">';
         mi = 0;
@@ -295,6 +303,9 @@ mlg.dispContent = function() {
         $('#slideL').animate({'marginLeft':'0px'},0);
 }
 mlg.dispMyContents = function() {
+        if (typeof motion !== "undefined") {
+            motion.getODataEntityList(Common.accessData.token, "contents", "content");
+        }
         $("#myContents").css("display", "block");
         $("#upload").css("display", "none");
         $("#teamContents").css("display", "none");

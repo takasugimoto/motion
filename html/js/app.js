@@ -16,6 +16,7 @@ getNamesapces = function() {
 additionalCallback = function() {
     Common.setRefreshTimer();
     Common.getProfileName(Common.getCellUrl(), displayMyDisplayName);
+    mlg.writeMenu();
 };
 
 displayMyDisplayName = function(extUrl, dispName) {

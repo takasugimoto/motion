@@ -228,7 +228,11 @@ getHashCell = function(hashText) {
                 </div>
                 <div id="contents" style="position:absolute; top:80px; width:100vw; margin:15px;">
                         <div id="myContents" style="display:block; width:100%;"></div>
-                        <div id="upload" style="display:none; width:100%;"></div>
+                        <div id="upload" style="display:none; width:100%;">
+                                <div id="dragandrophandler"><i data-i18n="motion:uploadMessage" style="margin:10px;"></i></title></div>
+                                <br><br>
+                                <div id="status1"></div>
+                        </div>
                         <div id="teamContents" style="display:none; width:100%;"></div>
                         <div id="setting" style="display:none; width:100%;"></div>
                 </div>
@@ -272,13 +276,13 @@ var dispImage = "";
 var loc = "";
 $("*[name=select_locales]").on('change', function() {
         loc = $("*[name=select_locales]").val();
-        i18next.changeLanguage(loc);
-        Common.getProfile(Common.accessData.cellUrl, loc).done(function(data) {
+        i18next.changeLanguage(loc, function(err, t) {
+            Common.getProfile(Common.accessData.cellUrl, loc).done(function(data) {
                 if (data !== null) {
                         dispName = data.DisplayName;
                         dispImage = data.Image;
                 }
-        }).always(function(){
+            }).always(function(){
                 Common.accessData.userName = dispName;
                 Common.accessData.profile = dispImage;
                 Common.accessData.locales = loc;
@@ -287,6 +291,7 @@ $("*[name=select_locales]").on('change', function() {
                 Common.updateContent();
                 //alert(i18next.t("motion:menu.menuItems.3.title"));
                 //alert(i18next.t("motion:title"));
+            });
         });
 });
 </script>
